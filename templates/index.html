@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Traffic Analyzer</title>
+    <meta http-equiv="refresh" content="10"> <!-- Auto-refresh every 10 seconds -->
+    <style>
+        * {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 26px;
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+        .container {
+            max-width: 90%;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            height: 90vh; /* Full screen height */
+        }
+        .section {
+            background-color: #1E1E1E;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 255, 128, 0.3);
+            padding: 15px;
+            margin-bottom: 15px;
+            flex: 1;
+            overflow-y: auto; /* Scrollable */
+            scrollbar-width: thin;
+            scrollbar-color: #888 #333;
+        }
+        h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #FFA500;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #222;
+            color: #ffffff;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        th {
+            background-color: #333;
+            color: #00FF99;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        tr:hover {
+            background-color: #2E2E2E;
+        }
+        .insights {
+            text-align: left;
+        }
+        .insight-box {
+            background-color: #222;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border-left: 5px solid #FFA500;
+        }
+        .insight-box strong {
+            color: #FFD700;
+        }
+        .refresh-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .refresh-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📡 Network Traffic Analyzer</h1>
+
+    <div class="container">
+
+        <!-- Packets Section (Top) -->
+        <div class="section">
+            <h2>📊 Captured Network Packets</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Timestamp</th>
+                        <th>Source IP</th>
+                        <th>Destination IP</th>
+                        <th>Protocol</th>
+                        <th>Port</th>
+                        <th>Packet Size</th>
+                        <th>Traffic Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for packet in packets %}
+                    <tr>
+                        <td>{{ packet.id }}</td>
+                        <td>{{ packet.timestamp }}</td>
+                        <td>{{ packet.source_ip }}</td>
+                        <td>{{ packet.destination_ip }}</td>
+                        <td>{{ packet.protocol }}</td>
+                        <td>{{ packet.port }}</td>
+                        <td>{{ packet.packet_size }}</td>
+                        <td style="color: {% if packet.traffic_type == 'Threat' %}red{% elif packet.traffic_type == 'Suspicious' %}orange{% else %}lightgreen{% endif %}; font-weight: bold;">
+                            {{ packet.traffic_type }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Insights Section (Bottom) -->
+        <div class="section">
+            <h2>⚠️ Network Insights & Recommendations</h2>
+            <div class="insights">
+                {% for insight in insights %}
+                <div class="insight-box">
+                    <strong>📝 Insight:</strong> {{ insight.insight }}<br>
+                    <strong>✅ Recommendation:</strong> {{ insight.recommendation }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    <form action="/" method="get">
+        <button type="submit" class="refresh-btn">🔄 Refresh Data</button>
+    </form>
+
+</body>
+</html>
